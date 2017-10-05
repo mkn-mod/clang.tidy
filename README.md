@@ -12,7 +12,7 @@ Link phase module
 
 ```yaml
 mod:
-  - name: clang.format
+  - name: clang.tidy
     version: master
     arg:
         link:
