@@ -16,10 +16,10 @@ mod:
     version: master
     arg:
         link:
-            args: -DArg       (optional, default="")
-            checks: CSV       (optional, default="", see: [link](https://clang.llvm.org/extra/clang-tidy/checks/list.html)) 
-            config: file      (optional, default='.clang-tidy')
-            types: cpp:cxx:cc (optional, default=cpp:cxx:cc)
+            args: -DArg       #(optional, default="")
+            checks: CSV       #(optional, default="", see: [link](https://clang.llvm.org/extra/clang-tidy/checks/list.html)) 
+            config: file      #(optional, default='.clang-tidy')
+            types: cpp:cxx:cc #(optional, default=cpp:cxx:cc)
 ```  
 
 ## Building
