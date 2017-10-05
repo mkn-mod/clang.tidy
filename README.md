@@ -10,6 +10,7 @@ Link phase module
 
 ## Usage
 
+```yaml
 mod:
   - name: clang.format
     version: master
@@ -19,7 +20,7 @@ mod:
             checks: CSV       (optional, default="", see: [link](https://clang.llvm.org/extra/clang-tidy/checks/list.html)) 
             config: file      (optional, default='.clang-tidy')
             types: cpp:cxx:cc (optional, default=cpp:cxx:cc)
-  
+```  
 
 ## Building
   
