@@ -52,8 +52,11 @@ class TidyModule : public maiken::Module{
         void link(maiken::Application& a, const YAML::Node& node) KTHROW (std::exception) override{
             VALIDATE_NODE(node);
 
+            KLOG(DBG) << kul::env::GET("PATH");
+            KLOG(DBG) << kul::env::WHICH("gcc");
+
             kul::Process p("clang-tidy");
-            
+
             std::string clangHome(kul::env::GET("CLANG_HOME"));
             if(!clangHome.empty()){
                 kul::Dir cBin("bin", clangHome);
@@ -76,40 +79,44 @@ class TidyModule : public maiken::Module{
 
             std::unordered_set<std::string> types;
             if(!node["types"]){
-                types.insert("cpp");
-                types.insert("cxx");
-                types.insert("cc");
+                types = {"cpp", "cxx", "cc", "cc", "h", "hpp"};
             }else
                 for(const auto& s : kul::String::SPLIT(node["types"].Scalar(), ":"))
                     types.insert(s);
 
             const auto sources = a.sourceMap();
             for(const auto& p1 : sources)
-                if(types.count(p1.first))
-                    for(const auto& p2 : p1.second)
-                        for(const auto& p3 : p2.second)
-                            p << kul::File(p3).escm();
+              if(types.count(p1.first))
+                for(const auto& p2 : p1.second)
+                  for(const auto& p3 : p2.second)
+                    p << kul::File(p3).escm();
 
             p << "--";
-            if(node["args"]) 
-                for(const auto& s : kul::cli::asArgs(node["args"].Scalar()))
-                    p << s;
-            for(const auto& s : a.includes())
-                p << std::string("-I" + kul::Dir(s.first).escm());
+            if(node["args"])
+              for(const auto& s : kul::cli::asArgs(node["args"].Scalar()))
+                 p << s;
+
+            for(const auto& s : a.includes()){
+              kul::Dir inc(s.first);
+              if(!inc) KEXCEPT(kul::Exception, "Directory does not exist: ")
+                << inc.path();
+              p << std::string("-I" + kul::Dir(s.first).escm());
+            }
+
             KLOG(DBG) << p;
             p.start();
         }
 };
 }}
 
-extern "C" 
-KUL_PUBLISH 
+extern "C"
+KUL_PUBLISH
 maiken::Module* maiken_module_construct() {
     return new mkn :: clang :: TidyModule;
 }
 
-extern "C" 
-KUL_PUBLISH  
+extern "C"
+KUL_PUBLISH
 void maiken_module_destruct(maiken::Module* p) {
     delete p;
 }

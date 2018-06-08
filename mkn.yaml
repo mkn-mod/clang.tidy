@@ -1,13 +1,12 @@
-#! build
 
 name: clang.tidy
 version: master
-
 property:
     maiken_location: ${MKN_HOME}/app/mkn/${version}
 
 parent: base
 src: mod.cpp
+mode: shared
 if_arg:
     win_shared: -DYAML_CPP_DLL
     shared: -DKUL_SHARED
@@ -16,10 +15,8 @@ profile:
   - name: base
     dep:
       - name: mkn
-        profile: lib
-        version: ${version}
+        profile: mod
         local: ${maiken_location}
-        scm: https://github.com/maiken/maiken
 
   - name: test
     parent: base

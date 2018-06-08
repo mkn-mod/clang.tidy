@@ -1,6 +1,6 @@
 # clang.tidy
 
-** clang-tidy maiken module ** 
+** clang-tidy maiken module **
 
 Link phase module
 
@@ -17,17 +17,17 @@ mod:
     arg:
         link:
             args: -DArg       #(optional, default="")
-            checks: CSV       #(optional, default="", see: [link](https://clang.llvm.org/extra/clang-tidy/checks/list.html)) 
+            checks: CSV       #(optional, default="", see: [link](https://clang.llvm.org/extra/clang-tidy/checks/list.html))
             config: file      #(optional, default='.clang-tidy')
             types: cpp:cxx:cc #(optional, default=cpp:cxx:cc)
-```  
+```
 
 ## Building
-  
+
   Windows cl:
 
     mkn clean build -tSa -EHsc -dp test
-  	mkn clean build -tSa -EHsc 
+  	mkn clean build -tSa -EHsc
   	mkn run -p test
 
 
@@ -36,4 +36,12 @@ mod:
     mkn clean build -tSa "-O2 -fPIC" -dp test -l "-pthread -ldl"
     mkn clean build -tSa "-O2 -fPIC" -l "-pthread -ldl"
     mkn run -p test
-    
+
+
+## Environment Variables
+
+    Key             CLANG_HOME
+    Type            string
+    Default         ""
+    Description     If set - looks for adds $CLANG_HOME/bin to PATH
+
