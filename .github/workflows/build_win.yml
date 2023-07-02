@@ -24,5 +24,5 @@ jobs:
         bash -c "rm /bin/link"
         bash -c "curl -Lo mkn.exe https://github.com/PhilipDeegan/mkn/releases/download/latest/mkn.exe"
         bash -c 'KLOG=2 ./mkn clean build run -dtOa "-EHsc -std:c++17"'
-        # bash -c 'KLOG=2 ./mkn clean build run -dtOp test -a "-EHsc -std:c++17"'
-        # clang-tidy is rare on windows
+        REM bash -c 'KLOG=2 ./mkn clean build run -dtOp test -a "-EHsc -std:c++17"'
+        REM clang-tidy is rare on windows
