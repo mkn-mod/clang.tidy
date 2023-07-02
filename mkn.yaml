@@ -2,7 +2,7 @@
 name: clang.tidy
 version: master
 property:
-    maiken_location: ${MKN_HOME}/app/mkn/${version}
+  maiken_location: ${MKN_HOME}/app/mkn/${version}
 
 parent: base
 src: mod.cpp
@@ -12,12 +12,14 @@ if_arg:
     shared: -DKUL_SHARED
 
 profile:
-  - name: base
-    dep:
-      - name: mkn
-        profile: mod
-        local: ${maiken_location}
+- name: base
+  dep: mkn&${maiken_location}[mod]
 
-  - name: test
-    parent: base
-    main: test.cpp
+- name: test
+  parent: base
+  main: test.cpp
+  dep: mkn&${maiken_location}[lib]
+
+- name: format
+  mod: |
+    clang.format{init{style: google, paths: .}}
