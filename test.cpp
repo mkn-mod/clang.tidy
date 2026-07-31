@@ -6,7 +6,7 @@
 
 const std::string yArgs = R"(
 args:
-    -std=c++17
+    -std=c++20
 )";
 
 int main(int argc, char* argv[]) {
