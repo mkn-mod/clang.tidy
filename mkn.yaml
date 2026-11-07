@@ -7,7 +7,7 @@ src: mod.cpp
 mode: shared
 if_arg:
     win_shared: -DYAML_CPP_DLL
-    shared: -DKUL_SHARED
+    shared: -DMKN_KUL_SHARED
 
 profile:
 - name: base
@@ -17,7 +17,7 @@ profile:
   mod: |
     clang.format{init{style: google, paths: .}}
 
-- name: tidy
+- name: test
   parent: base
   mod: clang.tidy
   src: mod.cpp
