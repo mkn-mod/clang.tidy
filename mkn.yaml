@@ -3,7 +3,7 @@ name: clang.tidy
 property:
   # dependency versions: master on master (not the default branch: mkn.mod's is
   #  the rolling latest, whose mkn.kul differs from a master project's)
-  mkn.mod.version: master
+  mkn.mod.version: latest
 version: master
 
 parent: base
@@ -17,9 +17,9 @@ profile:
   dep: mkn.mod#${mkn.mod.version}
 - name: format
   mod: |
-    clang.format#master{init{style: google, paths: .}}
+    clang.format#latest{init{style: google, paths: .}}
 
 - name: test
   parent: base
-  mod: clang.tidy#master
+  mod: clang.tidy#latest
   src: mod.cpp
