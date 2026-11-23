@@ -17,9 +17,9 @@ profile:
   dep: mkn.mod#${mkn.mod.version}
 - name: format
   mod: |
-    clang.format{init{style: google, paths: .}}
+    clang.format#master{init{style: google, paths: .}}
 
 - name: test
   parent: base
-  mod: clang.tidy
+  mod: clang.tidy#master
   src: mod.cpp
