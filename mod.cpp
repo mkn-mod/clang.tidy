@@ -29,26 +29,23 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include "mkn/mod/init.hpp"  // IWYU pragma: keep
+#include "mkn/kul/bon.hpp"
 
 #include "mkn/kul/os.hpp"
 #include "mkn/kul/log.hpp"
 #include "mkn/kul/proc.hpp"
-#include "mkn/kul/yaml.hpp"
 #include "mkn/kul/lang/cpp/compilers.hpp"
 
 namespace mkn::clang {
 
 class TidyModule : public mkn::mod::Module {
  protected:
-  static void VALIDATE_NODE(const YAML::Node& node) {
-    using namespace mkn::kul::yaml;
-    Validator({NodeValidator("args"), NodeValidator("config"), NodeValidator("checks"),
-               NodeValidator("types")})
-        .validate(node);
+  static void VALIDATE_NODE(mkn::mod::Node const& node) {
+    mkn::kul::bon::validate(node, {"args", "config", "checks", "types"});
   }
 
  public:
-  void init(mkn::mod::Context& ctx, const YAML::Node& node) KTHROW(std::exception) override {
+  void init(mkn::mod::Context& ctx, mkn::mod::Node const& node) KTHROW(std::exception) override {
     VALIDATE_NODE(node);
 
     std::string const binary = mkn::kul::env::GET("CLANG_TIDY", "clang-tidy");
@@ -62,10 +59,10 @@ class TidyModule : public mkn::mod::Module {
     }
 
     std::unordered_set<std::string> types;
-    if (!node["types"]) {
+    if (!node.find("types")) {
       types = {"cpp", "cxx", "cc", "h", "hpp"};
     } else
-      for (const auto& s : mkn::kul::String::SPLIT(node["types"].Scalar(), ":")) types.insert(s);
+      for (const auto& s : mkn::kul::String::SPLIT(node["types"].str(), ":")) types.insert(s);
 
     // Groups source files by their exact real compile args - the same
     // resolution logic the real build uses for that file - so files sharing
@@ -96,15 +93,15 @@ class TidyModule : public mkn::mod::Module {
         p.var(pa.name(), pa.toString());
       }
 
-      if (node["config"]) p << std::string("-config=" + node["config"].Scalar());
-      if (node["checks"]) p << std::string("-checks=" + node["checks"].Scalar());
+      if (node.find("config")) p << std::string("-config=" + node["config"].str());
+      if (node.find("checks")) p << std::string("-checks=" + node["checks"].str());
 
       for (std::string const& file : files) p << mkn::kul::File(file).escm();
       p << "--";
 
       for (std::string const& s : args) p << s;
-      if (node["args"])
-        for (const auto& s : mkn::kul::cli::asArgs(node["args"].Scalar())) p << s;
+      if (node.find("args"))
+        for (const auto& s : mkn::kul::cli::asArgs(node["args"].str())) p << s;
 
       KLOG(DBG) << p;
       p.start();
