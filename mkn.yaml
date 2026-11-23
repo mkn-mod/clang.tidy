@@ -1,5 +1,9 @@
 
 name: clang.tidy
+property:
+  # dependency versions: master on master (not the default branch: mkn.mod's and parse.yaml's is
+  #  the rolling latest, whose mkn.kul differs from a master project's)
+  mkn.mod.version: master
 version: master
 
 parent: base
@@ -10,13 +14,12 @@ if_arg:
 
 profile:
 - name: base
-  dep: mkn.mod
-
+  dep: mkn.mod#${mkn.mod.version}
 - name: format
   mod: |
-    clang.format{init{style: google, paths: .}}
+    clang.format#master{init{style: google, paths: .}}
 
 - name: test
   parent: base
-  mod: clang.tidy
+  mod: clang.tidy#master
   src: mod.cpp
